@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kayıt Ol - OSBEXPRESS</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e4bb8;
+            --primary-light: #e0e7ff;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .registration-container {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+            overflow: hidden;
+            min-height: 700px;
+        }
+        
+        .registration-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+            position: relative;
+        }
+        
+        .registration-form-section {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+        
+        .registration-tabs .nav-link {
+            border: none;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            border-radius: 10px 10px 0 0;
+            transition: all 0.3s ease;
+        }
+        
+        .registration-tabs .nav-link.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .registration-tabs .nav-link:not(.active):hover {
+            background: var(--primary-light);
+            color: var(--primary);
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 86, 219, 0.25);
+        }
+        
+        .form-select {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+        }
+        
+        .btn-register {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-register:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .password-container {
+            position: relative;
+        }
+        
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+        }
+        
+        .password-strength {
+            height: 4px;
+            border-radius: 2px;
+            margin-top: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .strength-weak { background: var(--error); width: 25%; }
+        .strength-medium { background: var(--warning); width: 50%; }
+        .strength-strong { background: var(--success); width: 75%; }
+        .strength-very-strong { background: var(--success); width: 100%; }
+        
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-list li {
+            padding: 0.75rem 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .feature-list li i {
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .step {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #6b7280;
+        }
+        
+        .step.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step-line {
+            flex: 1;
+            height: 2px;
+            background: #e5e7eb;
+            margin: 0 10px;
+        }
+        
+        .step-line.active {
+            background: var(--primary);
+        }
+        
+        .verification-code {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+        
+        .verification-code input {
+            width: 50px;
+            height: 60px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+        }
+        
+        .verification-code input:focus {
+            border-color: var(--primary);
+            outline: none;
+        }
+        
+        .countdown {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .registration-hero {
+                padding: 2rem;
+                text-align: center;
+            }
+            
+            .registration-form-section {
+                padding: 2rem;
+            }
+            
+            .registration-tabs .nav-link {
+                padding: 0.75rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12">
+                <div class="registration-container">
+                    <div class="row g-0">
+                        <!-- SOL TARAF - HERO -->
+                        <div class="col-lg-5 d-none d-lg-block">
+                            <div class="registration-hero">
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-bolt fa-3x text-warning mb-3"></i>
+                                    <h2 class="fw-bold">OSBEXPRESS Ailesine Katılın</h2>
+                                    <p class="lead">OSB'nizdeki parça ihtiyaçlarınız için en hızlı çözüm</p>
+                                </div>
+                                
+                                <ul class="feature-list">
+                                    <li>
+                                        <i class="fas fa-bolt"></i>
+                                        <span><strong>30-40 dakika</strong> içinde aynı OSB'den teslimat</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-store"></i>
+                                        <span><strong>OSB'nizdeki yüzlerce satıcıya</strong> anında ulaşın</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span><strong>%100 güvenli</strong> alışveriş garantisi</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-tags"></i>
+                                        <span><strong>Özel indirimler</strong> ve fırsatlardan yararlanın</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-headset"></i>
+                                        <span><strong>7/24 profesyonel</strong> müşteri desteği</span>
+                                    </li>
+                                </ul>
+                                
+                                <div class="mt-5">
+                                    <div class="bg-white-20 rounded p-3">
+                                        <p class="mb-2"><strong>Zaten hesabınız var mı?</strong></p>
+                                        <a href="giris.html" class="btn btn-warning w-100">
+                                            <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                                        </a>
+                                    </div>
+                                </div>
+                                
+                                <!-- İstatistikler -->
+                                <div class="row text-center mt-4">
+                                    <div class="col-4">
+                                        <div class="h4 fw-bold mb-1">500+</div>
+                                        <div class="small">Aktif Satıcı</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="h4 fw-bold mb-1">10K+</div>
+                                        <div class="small">Mutlu Müşteri</div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="h4 fw-bold mb-1">30dk</div>
+                                        <div class="small">Ort. Teslimat</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- SAĞ TARAF - KAYIT FORM -->
+                        <div class="col-lg-7">
+                            <div class="registration-form-section">
+                                <div class="text-center mb-4 d-lg-none">
+                                    <i class="fas fa-bolt fa-2x text-primary mb-2"></i>
+                                    <h3 class="fw-bold">OSBEXPRESS</h3>
+                                    <p class="text-muted">Hesabınızı oluşturun</p>
+                                </div>
+                                
+                                <!-- TAB MENÜ -->
+                                <ul class="nav nav-pills registration-tabs nav-justified mb-4" id="registrationTabs">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" href="#bireysel" data-bs-toggle="pill">
+                                            <i class="fas fa-user me-2"></i>Bireysel Hesap
+                                        </a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="#kurumsal" data-bs-toggle="pill">
+                                            <i class="fas fa-building me-2"></i>Kurumsal Hesap
+                                        </a>
+                                    </li>
+                                </ul>
+                                
+                                <div class="tab-content">
+                                    <!-- BİREYSEL KAYIT FORM -->
+                                    <div class="tab-pane fade show active" id="bireysel">
+                                        <h4 class="fw-bold mb-1">Bireysel Hesap Oluştur</h4>
+                                        <p class="text-muted mb-4">Kişisel alışverişleriniz için hesabınızı oluşturun</p>
+                                        
+                                        <form id="individualForm">
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Adınız <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Adınız" required>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Soyadınız <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Soyadınız" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">E-posta Adresi <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" placeholder="ornek@email.com" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Telefon Numarası <span class="text-danger">*</span></label>
+                                                <input type="tel" class="form-control" placeholder="5xx xxx xx xx" required>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Şifre <span class="text-danger">*</span></label>
+                                                    <div class="password-container">
+                                                        <input type="password" class="form-control" id="individualPassword" 
+                                                               placeholder="En az 6 karakter" minlength="6" required>
+                                                        <button type="button" class="password-toggle" onclick="togglePassword('individualPassword')">
+                                                            <i class="far fa-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="password-strength strength-weak" id="individualStrength"></div>
+                                                    <div class="form-text">Şifre gücü: <span id="individualStrengthText">Zayıf</span></div>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Şifre Tekrar <span class="text-danger">*</span></label>
+                                                    <div class="password-container">
+                                                        <input type="password" class="form-control" id="individualConfirmPassword" 
+                                                               placeholder="Şifrenizi tekrar girin" required>
+                                                        <button type="button" class="password-toggle" onclick="togglePassword('individualConfirmPassword')">
+                                                            <i class="far fa-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="form-text" id="individualMatchText"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">OSB Bölgeniz <span class="text-danger">*</span></label>
+                                                <select class="form-select" required>
+                                                    <option value="">OSB bölgenizi seçin</option>
+                                                    <option>1. Organize Sanayi Bölgesi</option>
+                                                    <option>2. Organize Sanayi Bölgesi</option>
+                                                    <option>3. Organize Sanayi Bölgesi</option>
+                                                    <option>4. Organize Sanayi Bölgesi</option>
+                                                    <option>5. Organize Sanayi Bölgesi</option>
+                                                    <option>6. Organize Sanayi Bölgesi</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" id="individualTerms" required>
+                                                <label class="form-check-label">
+                                                    <a href="kullanim-sartlari.html" class="text-decoration-none">Kullanım koşullarını</a> 
+                                                    ve <a href="gizlilik.html" class="text-decoration-none">gizlilik politikasını</a> okudum ve kabul ediyorum
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" id="individualNewsletter">
+                                                <label class="form-check-label">
+                                                    OSBEXPRESS'ten kampanya ve indirimler hakkında e-posta almak istiyorum
+                                                </label>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-register w-100 py-3 fw-bold">
+                                                <i class="fas fa-user-plus me-2"></i>Hesap Oluştur
+                                            </button>
+                                        </form>
+                                        
+                                        <div class="text-center mt-4">
+                                            <p class="text-muted">
+                                                Zaten hesabınız var mı? 
+                                                <a href="giris.html" class="text-primary fw-bold text-decoration-none">Giriş Yapın</a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                    
+                                    <!-- KURUMSAL KAYIT FORM -->
+                                    <div class="tab-pane fade" id="kurumsal">
+                                        <h4 class="fw-bold mb-1">Kurumsal Hesap Oluştur</h4>
+                                        <p class="text-muted mb-4">Firmanız için hesap oluşturun, satıcı olma imkanı kazanın</p>
+                                        
+                                        <form id="corporateForm">
+                                            <div class="mb-3">
+                                                <label class="form-label">Firma Ünvanı <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Firma adı" required>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Vergi Numarası <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" placeholder="Vergi numarası" required>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Telefon <span class="text-danger">*</span></label>
+                                                    <input type="tel" class="form-control" placeholder="5xx xxx xx xx" required>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">E-posta <span class="text-danger">*</span></label>
+                                                <input type="email" class="form-control" placeholder="firma@email.com" required>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">Yetkili Kişi <span class="text-danger">*</span></label>
+                                                <input type="text" class="form-control" placeholder="Yetkili kişi adı" required>
+                                            </div>
+                                            
+                                            <div class="row">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Şifre <span class="text-danger">*</span></label>
+                                                    <div class="password-container">
+                                                        <input type="password" class="form-control" id="corporatePassword" 
+                                                               placeholder="En az 6 karakter" minlength="6" required>
+                                                        <button type="button" class="password-toggle" onclick="togglePassword('corporatePassword')">
+                                                            <i class="far fa-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="password-strength strength-weak" id="corporateStrength"></div>
+                                                    <div class="form-text">Şifre gücü: <span id="corporateStrengthText">Zayıf</span></div>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label">Şifre Tekrar <span class="text-danger">*</span></label>
+                                                    <div class="password-container">
+                                                        <input type="password" class="form-control" id="corporateConfirmPassword" 
+                                                               placeholder="Şifrenizi tekrar girin" required>
+                                                        <button type="button" class="password-toggle" onclick="togglePassword('corporateConfirmPassword')">
+                                                            <i class="far fa-eye"></i>
+                                                        </button>
+                                                    </div>
+                                                    <div class="form-text" id="corporateMatchText"></div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="mb-3">
+                                                <label class="form-label">OSB Bölgeniz <span class="text-danger">*</span></label>
+                                                <select class="form-select" required>
+                                                    <option value="">OSB bölgenizi seçin</option>
+                                                    <option>1. Organize Sanayi Bölgesi</option>
+                                                    <option>2. Organize Sanayi Bölgesi</option>
+                                                    <option>3. Organize Sanayi Bölgesi</option>
+                                                    <option>4. Organize Sanayi Bölgesi</option>
+                                                    <option>5. Organize Sanayi Bölgesi</option>
+                                                    <option>6. Organize Sanayi Bölgesi</option>
+                                                </select>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" id="corporateTerms" required>
+                                                <label class="form-check-label">
+                                                    <a href="kullanim-sartlari.html" class="text-decoration-none">Kullanım koşullarını</a> 
+                                                    ve <a href="gizlilik.html" class="text-decoration-none">gizlilik politikasını</a> okudum ve kabul ediyorum
+                                                </label>
+                                            </div>
+                                            
+                                            <div class="form-check mb-4">
+                                                <input class="form-check-input" type="checkbox" id="corporateSeller">
+                                                <label class="form-check-label">
+                                                    Satıcı olmak istiyorum (Kurumsal hesaplar satıcı olabilir)
+                                                </label>
+                                            </div>
+                                            
+                                            <button type="submit" class="btn btn-register w-100 py-3 fw-bold">
+                                                <i class="fas fa-building me-2"></i>Kurumsal Hesap Oluştur
+                                            </button>
+                                        </form>
+                                        
+                                        <div class="text-center mt-4">
+                                            <p class="text-muted">
+                                                Zaten hesabınız var mı? 
+                                                <a href="giris.html" class="text-primary fw-bold text-decoration-none">Giriş Yapın</a>
+                                            </p>
+                                            <p class="text-muted small">
+                                                Kurumsal hesap ile satıcı olma imkanına sahip olursunuz.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Şifre göster/gizle
+        function togglePassword(inputId) {
+            const passwordInput = document.getElementById(inputId);
+            const toggleIcon = passwordInput.nextElementSibling.querySelector('i');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+        
+        // Şifre gücü kontrolü
+        function checkPasswordStrength(password, strengthBarId, strengthTextId) {
+            let strength = 0;
+            const strengthBar = document.getElementById(strengthBarId);
+            const strengthText = document.getElementById(strengthTextId);
+            
+            if (password.length >= 6) strength++;
+            if (password.length >= 8) strength++;
+            if (/[A-Z]/.test(password)) strength++;
+            if (/[0-9]/.test(password)) strength++;
+            if (/[^A-Za-z0-9]/.test(password)) strength++;
+            
+            // Güç seviyesine göre stil ayarla
+            strengthBar.className = 'password-strength';
+            if (strength <= 1) {
+                strengthBar.classList.add('strength-weak');
+                strengthText.textContent = 'Zayıf';
+            } else if (strength <= 2) {
+                strengthBar.classList.add('strength-medium');
+                strengthText.textContent = 'Orta';
+            } else if (strength <= 3) {
+                strengthBar.classList.add('strength-strong');
+                strengthText.textContent = 'Güçlü';
+            } else {
+                strengthBar.classList.add('strength-very-strong');
+                strengthText.textContent = 'Çok Güçlü';
+            }
+        }
+        
+        // Şifre eşleşme kontrolü
+        function checkPasswordMatch(passwordId, confirmPasswordId, matchTextId) {
+            const password = document.getElementById(passwordId).value;
+            const confirmPassword = document.getElementById(confirmPasswordId).value;
+            const matchText = document.getElementById(matchTextId);
+            
+            if (confirmPassword === '') {
+                matchText.textContent = '';
+                matchText.className = 'form-text';
+            } else if (password === confirmPassword) {
+                matchText.textContent = 'Şifreler eşleşiyor';
+                matchText.className = 'form-text text-success';
+            } else {
+                matchText.textContent = 'Şifreler eşleşmiyor';
+                matchText.className = 'form-text text-danger';
+            }
+        }
+        
+        // Event listener'ları ayarla
+        document.addEventListener('DOMContentLoaded', function() {
+            // Bireysel form şifre kontrolü
+            const individualPassword = document.getElementById('individualPassword');
+            const individualConfirmPassword = document.getElementById('individualConfirmPassword');
+            
+            individualPassword.addEventListener('input', function() {
+                checkPasswordStrength(this.value, 'individualStrength', 'individualStrengthText');
+                checkPasswordMatch('individualPassword', 'individualConfirmPassword', 'individualMatchText');
+            });
+            
+            individualConfirmPassword.addEventListener('input', function() {
+                checkPasswordMatch('individualPassword', 'individualConfirmPassword', 'individualMatchText');
+            });
+            
+            // Kurumsal form şifre kontrolü
+            const corporatePassword = document.getElementById('corporatePassword');
+            const corporateConfirmPassword = document.getElementById('corporateConfirmPassword');
+            
+            corporatePassword.addEventListener('input', function() {
+                checkPasswordStrength(this.value, 'corporateStrength', 'corporateStrengthText');
+                checkPasswordMatch('corporatePassword', 'corporateConfirmPassword', 'corporateMatchText');
+            });
+            
+            corporateConfirmPassword.addEventListener('input', function() {
+                checkPasswordMatch('corporatePassword', 'corporateConfirmPassword', 'corporateMatchText');
+            });
+        });
+        
+        // Form gönderim işlemleri
+        document.getElementById('individualForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('individualPassword').value;
+            const confirmPassword = document.getElementById('individualConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Şifreler eşleşmiyor!');
+                return;
+            }
+            
+            showLoading('individualForm');
+            
+            setTimeout(() => {
+                alert('Bireysel kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.');
+                window.location.href = 'giris.html';
+            }, 2000);
+        });
+        
+        document.getElementById('corporateForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const password = document.getElementById('corporatePassword').value;
+            const confirmPassword = document.getElementById('corporateConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Şifreler eşleşmiyor!');
+                return;
+            }
+            
+            showLoading('corporateForm');
+            
+            setTimeout(() => {
+                alert('Kurumsal kayıt başarılı! Giriş sayfasına yönlendiriliyorsunuz.');
+                window.location.href = 'giris.html';
+            }, 2000);
+        });
+        
+        // Yükleme efekti
+        function showLoading(formId) {
+            const submitBtn = document.querySelector(`#${formId} .btn-register`);
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Kayıt Yapılıyor...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

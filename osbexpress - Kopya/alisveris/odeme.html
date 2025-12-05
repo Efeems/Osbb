@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ödeme - OSBEXPRESS</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e4bb8;
+            --primary-light: #e0e7ff;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--light);
+            padding-top: 80px;
+        }
+        
+        .payment-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .payment-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .order-summary {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            border: 1px solid var(--gray-200);
+            position: sticky;
+            top: 100px;
+        }
+        
+        .payment-method {
+            border: 2px solid var(--gray-300);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .payment-method:hover {
+            border-color: var(--primary);
+        }
+        
+        .payment-method.selected {
+            border-color: var(--primary);
+            background: var(--primary-light);
+        }
+        
+        .payment-icon {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-light);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+        
+        .form-control {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+        
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 86, 219, 0.25);
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            border-color: var(--primary);
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .btn-warning {
+            background: var(--secondary);
+            border-color: var(--secondary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+        }
+        
+        .price {
+            color: var(--success);
+            font-weight: 700;
+        }
+        
+        .security-badge {
+            background: var(--success);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .cart-item {
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+        
+        .step-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gray-300);
+            color: var(--gray-600);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step.active .step-number {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+        }
+        
+        .step-line {
+            width: 100px;
+            height: 2px;
+            background: var(--gray-300);
+            margin: 0 1rem;
+            position: relative;
+            top: -20px;
+        }
+        
+        .step-line.completed {
+            background: var(--success);
+        }
+        
+        .credit-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .credit-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200px;
+            height: 200px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+        
+        .card-chip {
+            width: 50px;
+            height: 40px;
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            border-radius: 8px;
+            margin-bottom: 2rem;
+        }
+        
+        .card-number {
+            font-family: 'Courier New', monospace;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+        
+        .card-details {
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        @media (max-width: 768px) {
+            .step-line {
+                width: 50px;
+            }
+            
+            .credit-card {
+                padding: 1.5rem;
+            }
+            
+            .card-number {
+                font-size: 1.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="index.html">
+                <i class="fas fa-bolt me-2"></i>OSBEXPRESS
+            </a>
+            
+            <div class="navbar-nav ms-auto" id="userNav">
+                <!-- JavaScript ile doldurulacak -->
+            </div>
+        </div>
+    </nav>
+
+    <!-- ÖDEME SAYFASI -->
+    <div class="container py-4">
+        <nav aria-label="breadcrumb" class="mb-4">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html" class="text-decoration-none">Ana Sayfa</a></li>
+                <li class="breadcrumb-item"><a href="sepet.html" class="text-decoration-none">Sepet</a></li>
+                <li class="breadcrumb-item active">Ödeme</li>
+            </ol>
+        </nav>
+
+        <!-- ADIM GÖSTERGESİ -->
+        <div class="step-indicator">
+            <div class="step completed">
+                <div class="step-number">1</div>
+                <div class="step-label small">Sepet</div>
+            </div>
+            <div class="step-line completed"></div>
+            <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label small">Ödeme</div>
+            </div>
+            <div class="step-line"></div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label small">Onay</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- ÖDEME FORMU -->
+            <div class="col-lg-8">
+                <!-- TESLİMAT BİLGİLERİ -->
+                <div class="payment-card">
+                    <h5 class="fw-bold mb-4">
+                        <i class="fas fa-truck me-2 text-primary"></i>Teslimat Bilgileri
+                    </h5>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Ad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" value="Ahmet" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Soyad <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" value="Yılmaz" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Telefon <span class="text-danger">*</span></label>
+                        <input type="tel" class="form-control" value="555 123 45 67" required>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Teslimat Adresi <span class="text-danger">*</span></label>
+                        <textarea class="form-control" rows="3" required>1. Organize Sanayi Bölgesi, Teknopark Binası No:15, Oda:204</textarea>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Teslimat Notu (Opsiyonel)</label>
+                        <textarea class="form-control" rows="2" placeholder="Teslimat ile ilgili notunuz..."></textarea>
+                    </div>
+                </div>
+
+                <!-- ÖDEME YÖNTEMİ -->
+                <div class="payment-card">
+                    <h5 class="fw-bold mb-4">
+                        <i class="fas fa-credit-card me-2 text-primary"></i>Ödeme Yöntemi
+                    </h5>
+                    
+                    <!-- KREDİ KARTI -->
+                    <div class="payment-method selected" onclick="selectPaymentMethod('creditCard')" id="creditCardMethod">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="payment-icon">
+                                    <i class="fas fa-credit-card"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="fw-bold mb-1">Kredi / Banka Kartı</h6>
+                                <p class="text-muted mb-0">Kart bilgilerinizle güvenli ödeme</p>
+                            </div>
+                            <div class="col-auto">
+                                <i class="fas fa-check-circle text-primary"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KREDİ KARTI FORM -->
+                    <div id="creditCardForm">
+                        <div class="credit-card mb-4">
+                            <div class="card-chip"></div>
+                            <div class="card-number" id="cardNumberDisplay">•••• •••• •••• 1234</div>
+                            <div class="card-details">
+                                <div>
+                                    <small>Kart Sahibi</small>
+                                    <div>AHMET YILMAZ</div>
+                                </div>
+                                <div>
+                                    <small>Son Kullanma</small>
+                                    <div>12/25</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-12 mb-3">
+                                <label class="form-label">Kart Numarası <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="1234 5678 9012 3456" 
+                                       maxlength="19" oninput="formatCardNumber(this)" id="cardNumber">
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">Son Kullanma Tarihi <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="MM/YY" 
+                                       maxlength="5" oninput="formatExpiry(this)" id="cardExpiry">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label">CVV <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" placeholder="123" 
+                                       maxlength="3" id="cardCvv">
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Kart Üzerindeki İsim <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" placeholder="AHMET YILMAZ" id="cardName">
+                        </div>
+                        
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="saveCard">
+                            <label class="form-check-label" for="saveCard">
+                                Kart bilgilerimi kaydet (güvenli şekilde şifrelenir)
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- KAPIDA ÖDEME -->
+                    <div class="payment-method" onclick="selectPaymentMethod('cash')" id="cashMethod">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="payment-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="fw-bold mb-1">Kapıda Nakit Ödeme</h6>
+                                <p class="text-muted mb-0">Teslimatta nakit ödeme</p>
+                            </div>
+                            <div class="col-auto">
+                                <i class="far fa-circle text-muted"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- HAVALE/EFT -->
+                    <div class="payment-method" onclick="selectPaymentMethod('transfer')" id="transferMethod">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <div class="payment-icon">
+                                    <i class="fas fa-university"></i>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <h6 class="fw-bold mb-1">Havale/EFT</h6>
+                                <p class="text-muted mb-0">Banka hesabımıza havale</p>
+                            </div>
+                            <div class="col-auto">
+                                <i class="far fa-circle text-muted"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SÖZLEŞME ONAYI -->
+                <div class="payment-card">
+                    <h5 class="fw-bold mb-4">Sözleşme Onayı</h5>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="termsCheck" required>
+                        <label class="form-check-label" for="termsCheck">
+                            <a href="mesafeli-satis.html" class="text-decoration-none">Mesafeli satış sözleşmesini</a> okudum ve kabul ediyorum
+                        </label>
+                    </div>
+                    
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="privacyCheck" required>
+                        <label class="form-check-label" for="privacyCheck">
+                            <a href="gizlilik.html" class="text-decoration-none">Gizlilik politikasını</a> okudum ve kabul ediyorum
+                        </label>
+                    </div>
+                    
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="newsletterCheck">
+                        <label class="form-check-label" for="newsletterCheck">
+                            Kampanya ve indirimlerden haberdar olmak istiyorum
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SİPARİŞ ÖZETİ -->
+            <div class="col-lg-4">
+                <div class="order-summary">
+                    <h5 class="fw-bold mb-4">Sipariş Özeti</h5>
+                    
+                    <!-- ÜRÜNLER -->
+                    <div class="cart-item">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="fw-bold mb-1">Conta Seti - Universal</h6>
+                                <small class="text-muted">1 adet</small>
+                            </div>
+                            <div class="price">₺250</div>
+                        </div>
+                        <small class="text-muted">TeknoParça Ltd. Şti.</small>
+                    </div>
+                    
+                    <div class="cart-item">
+                        <div class="d-flex justify-content-between align-items-start mb-2">
+                            <div>
+                                <h6 class="fw-bold mb-1">Endüstriyel Rulman Seti</h6>
+                                <small class="text-muted">2 adet</small>
+                            </div>
+                            <div class="price">₺640</div>
+                        </div>
+                        <small class="text-muted">TeknoParça Ltd. Şti.</small>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Ara Toplam</span>
+                        <span>₺890</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Kargo</span>
+                        <span class="text-success">Ücretsiz</span>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>İndirim</span>
+                        <span class="text-success">-₺50</span>
+                    </div>
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-4">
+                        <strong>Toplam</strong>
+                        <strong class="h5 text-success">₺840</strong>
+                    </div>
+                    
+                    <div class="security-badge text-center mb-3">
+                        <i class="fas fa-lock me-2"></i>256-bit SSL Güvenli Ödeme
+                    </div>
+                    
+                    <button class="btn btn-warning w-100 py-3 mb-3" onclick="completePayment()">
+                        <i class="fas fa-shield-alt me-2"></i>Siparişi Tamamla
+                    </button>
+                    
+                    <button class="btn btn-outline-primary w-100" onclick="goBackToCart()">
+                        <i class="fas fa-arrow-left me-2"></i>Sepete Dön
+                    </button>
+                    
+                    <div class="mt-4 text-center">
+                        <small class="text-muted">
+                            <i class="fas fa-clock me-1"></i>
+                            Beklenen Teslimat: <strong>30-40 dakika</strong>
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="footer bg-dark text-white mt-5">
+        <div class="container py-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2024 OSBEXPRESS. Tüm hakları saklıdır.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <a href="gizlilik.html" class="text-white-50 text-decoration-none me-3">Gizlilik</a>
+                    <a href="kullanim-sartlari.html" class="text-white-50 text-decoration-none">Kullanım Şartları</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // Ödeme yöntemi seçimi
+        function selectPaymentMethod(method) {
+            // Tüm ödeme yöntemlerini sıfırla
+            document.querySelectorAll('.payment-method').forEach(item => {
+                item.classList.remove('selected');
+                item.querySelector('.fa-check-circle').classList.replace('fa-check-circle', 'fa-circle');
+                item.querySelector('.fa-check-circle')?.classList.replace('text-primary', 'text-muted');
+            });
+            
+            // Seçilen yöntemi aktif et
+            const selectedMethod = document.getElementById(method + 'Method');
+            selectedMethod.classList.add('selected');
+            selectedMethod.querySelector('.fa-circle').classList.replace('fa-circle', 'fa-check-circle');
+            selectedMethod.querySelector('.fa-check-circle').classList.replace('text-muted', 'text-primary');
+            
+            // Formları göster/gizle
+            document.getElementById('creditCardForm').style.display = 
+                method === 'creditCard' ? 'block' : 'none';
+        }
+        
+        // Kart numarası formatlama
+        function formatCardNumber(input) {
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            let formattedValue = '';
+            
+            for (let i = 0; i < value.length; i++) {
+                if (i > 0 && i % 4 === 0) {
+                    formattedValue += ' ';
+                }
+                formattedValue += value[i];
+            }
+            
+            input.value = formattedValue;
+            document.getElementById('cardNumberDisplay').textContent = formattedValue || '•••• •••• •••• 1234';
+        }
+        
+        // Son kullanma tarihi formatlama
+        function formatExpiry(input) {
+            let value = input.value.replace(/\s+/g, '').replace(/[^0-9]/gi, '');
+            
+            if (value.length >= 2) {
+                value = value.substring(0, 2) + '/' + value.substring(2, 4);
+            }
+            
+            input.value = value;
+        }
+        
+        // Ödemeyi tamamlama
+        function completePayment() {
+            const termsChecked = document.getElementById('termsCheck').checked;
+            const privacyChecked = document.getElementById('privacyCheck').checked;
+            
+            if (!termsChecked || !privacyChecked) {
+                alert('Lütfen tüm sözleşmeleri okuyup kabul edin.');
+                return;
+            }
+            
+            // Ödeme işlemi simülasyonu
+            showLoading();
+            
+            setTimeout(() => {
+                alert('Ödeme başarılı! Siparişiniz alındı. Sipariş detay sayfasına yönlendiriliyorsunuz.');
+                window.location.href = 'siparis-detay.html?orderId=' + Date.now();
+            }, 3000);
+        }
+        
+        // Sepete dön
+        function goBackToCart() {
+            window.location.href = 'sepet.html';
+        }
+        
+        // Yükleme efekti
+        function showLoading() {
+            const submitBtn = document.querySelector('.btn-warning');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Ödeme İşleniyor...';
+            submitBtn.disabled = true;
+            
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 3000);
+        }
+        
+        // Sayfa yüklendiğinde
+        document.addEventListener('DOMContentLoaded', function() {
+            // Navbar güncelleme
+            const isLoggedIn = localStorage.getItem('userLoggedIn');
+            const userName = localStorage.getItem('userName');
+            const userNav = document.getElementById('userNav');
+            
+            if (isLoggedIn === 'true' && userName) {
+                userNav.innerHTML = `
+                    <a class="nav-link position-relative" href="sepet.html">
+                        <i class="fas fa-shopping-cart me-1"></i> Sepet
+                        <span class="badge bg-warning ms-1">2</span>
+                    </a>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-user me-1"></i>${userName}
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="profil.html">Profilim</a></li>
+                            <li><a class="dropdown-item" href="#" onclick="logout()">Çıkış Yap</a></li>
+                        </ul>
+                    </li>
+                `;
+            } else {
+                userNav.innerHTML = `
+                    <a class="nav-link position-relative" href="sepet.html">
+                        <i class="fas fa-shopping-cart me-1"></i> Sepet
+                        <span class="badge bg-warning ms-1">2</span>
+                    </a>
+                    <a class="nav-link" href="giris.html">
+                        <i class="fas fa-user me-1"></i> Giriş Yap
+                    </a>
+                `;
+            }
+        });
+        
+        function logout() {
+            localStorage.removeItem('userLoggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            alert('Çıkış yapıldı!');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

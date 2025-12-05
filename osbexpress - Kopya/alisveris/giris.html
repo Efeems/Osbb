@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap - OSBEXPRESS</title>
+
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --primary: #1a56db;
+            --primary-dark: #1e4bb8;
+            --primary-light: #e0e7ff;
+            --secondary: #f59e0b;
+            --secondary-dark: #d97706;
+            --success: #10b981;
+            --error: #ef4444;
+            --dark: #1f2937;
+            --light: #f8fafc;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .login-container {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 600px;
+        }
+
+        .login-hero {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .login-form-section {
+            padding: 3rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            border: 2px solid #e5e7eb;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(26, 86, 219, 0.25);
+        }
+
+        .btn-login {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+            padding: 0.75rem 2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            background: var(--primary-dark);
+            border-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .social-login-btn {
+            border: 2px solid #e5e7eb;
+            padding: 0.75rem;
+            border-radius: 10px;
+            text-decoration: none;
+            color: var(--dark);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .social-login-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            color: var(--dark);
+            text-decoration: none;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: #6b7280;
+            margin: 2rem 0;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .divider span {
+            padding: 0 1rem;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        .feature-list li {
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .feature-list li i {
+            color: var(--secondary);
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .login-hero {
+                padding: 2rem;
+                text-align: center;
+            }
+
+            .login-form-section {
+                padding: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="login-container">
+                    <div class="row g-0">
+                        <!-- SOL TARAF - HERO -->
+                        <div class="col-lg-6 d-none d-lg-block">
+                            <div class="login-hero">
+                                <div class="text-center mb-4">
+                                    <i class="fas fa-bolt fa-3x text-warning mb-3"></i>
+                                    <h2 class="fw-bold">OSBEXPRESS'e Hoş Geldiniz</h2>
+                                    <p class="lead">OSB'nizdeki parça ihtiyaçlarınız için hızlı çözüm</p>
+                                </div>
+
+                                <ul class="feature-list">
+                                    <li>
+                                        <i class="fas fa-bolt"></i>
+                                        <span>Aynı OSB içi 30-40 dakikada teslimat</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-shield-alt"></i>
+                                        <span>Güvenli alışveriş garantisi</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-store"></i>
+                                        <span>OSB'nizdeki yüzlerce satıcı</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-headset"></i>
+                                        <span>7/24 müşteri desteği</span>
+                                    </li>
+                                    <li>
+                                        <i class="fas fa-undo-alt"></i>
+                                        <span>Kolay iade ve değişim</span>
+                                    </li>
+                                </ul>
+
+                                <div class="mt-5">
+                                    <div class="bg-white-20 rounded p-3">
+                                        <p class="mb-2"><strong>Henüz hesabınız yok mu?</strong></p>
+                                        <a href="kayit.html" class="btn btn-warning w-100">
+                                            <i class="fas fa-user-plus me-2"></i>Ücretsiz Kayıt Ol
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- SAĞ TARAF - GİRİŞ FORM -->
+                        <div class="col-lg-6">
+                            <div class="login-form-section">
+                                <div class="text-center mb-4 d-lg-none">
+                                    <i class="fas fa-bolt fa-2x text-primary mb-2"></i>
+                                    <h3 class="fw-bold">OSBEXPRESS</h3>
+                                </div>
+
+                                <h2 class="fw-bold mb-1">Hesabınıza Giriş Yapın</h2>
+                                <p class="text-muted mb-4">Devam edebilmek için giriş yapın</p>
+
+                                <form id="loginForm">
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">E-posta Adresi</label>
+                                        <input type="email" class="form-control" id="email"
+                                            placeholder="ornek@osbexpress.com" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Şifre</label>
+                                        <div class="password-container">
+                                            <input type="password" class="form-control" id="password"
+                                                placeholder="Şifrenizi girin" required minlength="6">
+                                            <button type="button" class="password-toggle" onclick="togglePassword()">
+                                                <i class="far fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="rememberMe">
+                                            <label class="form-check-label" for="rememberMe">
+                                                Beni hatırla
+                                            </label>
+                                        </div>
+                                        <a href="sifre-sifirla.html" class="text-primary text-decoration-none">
+                                            Şifremi Unuttum?
+                                        </a>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-login w-100 py-3 mb-3">
+                                        <i class="fas fa-sign-in-alt me-2"></i>Giriş Yap
+                                    </button>
+
+                                    <div class="divider">
+                                        <span>veya</span>
+                                    </div>
+
+                                    <div class="row g-2 mb-4">
+                                        <div class="col-6">
+                                            <a href="#" class="social-login-btn">
+                                                <i class="fab fa-google text-danger"></i>
+                                                <span>Google</span>
+                                            </a>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="#" class="social-login-btn">
+                                                <i class="fab fa-microsoft text-primary"></i>
+                                                <span>Microsoft</span>
+                                            </a>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-center">
+                                        <p class="text-muted">
+                                            Hesabınız yok mu?
+                                            <a href="kayit.html" class="text-primary fw-bold text-decoration-none">
+                                                Hemen kayıt olun
+                                            </a>
+                                        </p>
+                                    </div>
+                                </form>
+
+                                <!-- SATICI GİRİŞİ -->
+                                <div class="border-top pt-4 mt-4">
+                                    <div class="text-center">
+                                        <p class="text-muted mb-3">Satıcı hesabınız var mı?</p>
+                                        <a href="satıcı-panel.html" class="btn btn-outline-primary w-100">
+                                            <i class="fas fa-store me-2"></i>Satıcı Girişi Yap
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Şifre göster/gizle
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.password-toggle i');
+
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        // Form gönderimi - GÜNCELLENMİŞ VERSİYON
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            // Basit validasyon
+            if (!email || !password) {
+                alert('Lütfen tüm alanları doldurun!');
+                return;
+            }
+
+            showLoading();
+
+            setTimeout(() => {
+                // 1. LocalStorage'a kullanıcı bilgisini kaydet
+                localStorage.setItem('userLoggedIn', 'true');
+                localStorage.setItem('userEmail', email);
+                localStorage.setItem('userName', email.split('@')[0]); // İsim için
+
+                // 2. Başarılı mesajı göster
+                alert('Giriş başarılı! Ana sayfaya yönlendiriliyorsunuz.');
+
+                // 3. Ana sayfaya yönlendir (navbar otomatik güncellenecek)
+                window.location.href = 'index.html';
+            }, 1500);
+        });
+
+        // Yükleme efekti
+        function showLoading() {
+            const submitBtn = document.querySelector('.btn-login');
+            const originalText = submitBtn.innerHTML;
+
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Giriş Yapılıyor...';
+            submitBtn.disabled = true;
+
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 1500);
+        }
+
+        // Enter tuşu ile giriş
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                document.getElementById('loginForm').dispatchEvent(new Event('submit'));
+            }
+        });
+
+        // Sayfa yüklendiğinde e-posta input'una focus
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('email').focus();
+        });
+    </script>
+</body>
+
+</html>
